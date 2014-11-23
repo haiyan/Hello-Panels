@@ -21,27 +21,44 @@
     
       
 <script type='text/javascript'>//<![CDATA[ 
+
+
+
+
 $(window).load(function(){
-var $template = $(".template");
+	var $template = $(".template");
+	var $task_template = $(".task-template");
+	
+	$(".btn-add-panel").on("click", function () {
+    	var $newPanel = $template.clone();
+    	$("#accordion").append($newPanel.fadeIn());
+    	// make all items having class 'edit' editable
+		// make all items having class 'edit' editable
+		$('.edit').editable({
+    		type: 'text',
+    		pk: 1,
+		    url: '/post',
+		});
+		$newPanel.find(".btn-add-task").on("click", function(){
+  		  	var $newTask = $task_template.clone();
+    		var $parentDiv = this.parentNode;
+    		var $div = $(this).prev();
+        
+    		$div.append($newTask.fadeIn());
+			$('.edit').editable({
+    			type: 'text',
+    			pk: 1,
+	    		url: '/post',
+			});
+	
+		});
+		
+	});
 
-var hash = 2;
-$(".btn-add-panel").on("click", function () {
-    var $newPanel = $template.clone();
-    $newPanel.find(".collapse").removeClass("in");
-    $newPanel.find(".accordion-toggle").attr("href", "#" + (++hash))
-        .text("Dynamic panel #" + hash);
-    $newPanel.find(".panel-collapse").attr("id", hash);
-    $("#accordion").append($newPanel.fadeIn());
-    // make all items having class 'edit' editable
-// make all items having class 'edit' editable
-$('.edit').editable({
-    type: 'text',
-    pk: 1,
-    url: '/post',
-});
 });
 
-});//]]>  
+
+//]]>  
 
 </script>
 
@@ -94,33 +111,29 @@ $.mockjax({
 Sprint #2 - Nov 19, 2014 - Dec 19, 2014
 <div class="container theme-showcase" role="main">
 	<div class="panel-group" id="accordion">
-		<div class="col-sm-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title edit">Panel title</h3>
-            </div>
-            <div class="panel-body">
-<button type="button" class="btn btn-success">Add a task</button>
-            </div>
-          </div>
-        </div>        
-
 		<div class="col-sm-4 template">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title edit">Panel title</h3>
             </div>
             <div class="panel-body">
-<button type="button" class="btn btn-success">Add a task</button>
+				<div class="panel-group" id="tasks">
+					<div class="panel panel-success task-template">
+            			<div class="panel-heading">
+              				<h3 class="panel-title edit">Task title</h3>
+            			</div>
+           				<div class="panel-body edit">
+              				Task content
+            			</div>
+          			</div>
+          		</div>
+				<button type="button" class="btn btn-success btn-add-task">Add a task</button>
             </div>
           </div>
-        </div>
+        </div>        
 	</div>
-
-
-<br />
-<button class="btn btn-lg btn-primary btn-add-panel"> <i class="glyphicon glyphicon-plus"></i> Add a panel</button>
-
+	<br />
+	<button class="btn btn-lg btn-primary btn-add-panel"> <i class="glyphicon glyphicon-plus"></i> Add a panel</button>
 </div>
 
 </body></html>
